@@ -38,7 +38,8 @@ const postRender = $ => {
 
     uniq(columnWidths).forEach((width) => {
       const { width: parsedWidth } = helpers.widthParser(width, { parseFloatToInt: false })
-      const mediaQueryClass = `${className}-${parseInt(parsedWidth)}`
+      const mediaQuerySuffix = parsedWidth % 1 == 0 ? `${parseInt(parsedWidth)}` : parsedWidth.toFixed(2).replace('.', '-')
+      const mediaQueryClass = `${className}-${mediaQuerySuffix}`
 
       mediaQueries.push(`.${mediaQueryClass} { width:${parsedWidth}${unit}!important; }`)
     })
@@ -92,7 +93,9 @@ class Column extends Component {
     const width = mjAttribute('width')
 
     if (width == undefined) {
-      return `mj-column-per-${parseInt(100 / sibling)}`
+      const name = (100 / sibling) % 1 == 0 ? `${parseInt(100 / sibling)}` : (100 / sibling).toFixed(2).replace('.', '-')
+
+      return `mj-column-per-${name}`
     }
 
     const { width: parsedWidth, unit } = helpers.widthParser(width)
